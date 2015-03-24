@@ -223,9 +223,9 @@ var jsonTreeViewer = (function() {
 				
 				if (name !== null) {
 					str = '<span class="name_wrapper">\
-						<span class="name">"' +
+						<span class="name">' +
 							'<span class="expand_button"></span>' +
-							name +
+							'"' + name +
 						'"</span> : </span>' + str;
 				}
 				
@@ -331,10 +331,6 @@ var jsonTreeViewer = (function() {
 	var tree = (function() {
 		var el = document.getElementById("tree"),
 			root = null;
-			
-		el.addEventListener('mousedown', function(e) {
-			e.preventDefault();
-		}, false);
 
 		return {
 			set_root : function(child) {
