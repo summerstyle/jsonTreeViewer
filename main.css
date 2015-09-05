@@ -2,7 +2,7 @@
  * JSON Tree Viewer
  * http://github.com/summerstyle/jsonTreeViewer
  *
- * Copyright 2014 Vera Lobacheva (summerstyle.ru)
+ * Copyright 2015 Vera Lobacheva (summerstyle.ru)
  * Released under the GPL3 (GPL3.txt)
  *
  * Sun 27 2014 20:15:00 GMT+0400
@@ -151,7 +151,7 @@ a:link, a:visited {
 #tree ul {
     margin-left: 35px; 
     margin-bottom: 5px;
-	line-height: 2;
+    line-height: 2;
 }
 #tree li {
     
@@ -160,38 +160,38 @@ a:link, a:visited {
     display: none;
 }
 .expanded > .value > .children {
-	display: block;
+    display: block;
 }
 .name_wrapper {
-	float: left;
-	margin-right: 8px;
+    float: left;
+    margin-right: 8px;
 }
 .name {
     font-weight: normal;
     vertical-align: top;
     color: #000;
-	position: relative;
+    position: relative;
 }
 .expand_button {
-	position: absolute;
-	top: 5px;
-	left: -15px;
-	display: block;
-	width: 9px;
-	height: 9px;
-	background: #777;
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gUBFAsKjLIEkwAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAQElEQVQI14WPyw0AMAhCrenOMAJb24OHNvb3ThiFYIsIkrYhyQDECQC+3pYAtzu9OFJImrscSKb4Z3rtvdAe/w3I7C/CeujfAgAAAABJRU5ErkJggg==);
+    position: absolute;
+    top: 5px;
+    left: -15px;
+    display: block;
+    width: 9px;
+    height: 9px;
+    background: #777;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gUBFAsKjLIEkwAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAQElEQVQI14WPyw0AMAhCrenOMAJb24OHNvb3ThiFYIsIkrYhyQDECQC+3pYAtzu9OFJImrscSKb4Z3rtvdAe/w3I7C/CeujfAgAAAABJRU5ErkJggg==);
 }
 .expanded > .name_wrapper > .name > .expand_button {
-	background: #FFF;
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gUBFAwe2SlGKQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAARUlEQVQI132PwQ3AMAwCjdWd8QhMbfrIo1Ga5D4IYYEM21UVPyQFSe8gmfOt7dlmnHmGLJOSvmyY7s7MfSeA496S4fLfC/74Ll1MLvV+AAAAAElFTkSuQmCC);
+    background: #FFF;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gUBFAwe2SlGKQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAARUlEQVQI132PwQ3AMAwCjdWd8QhMbfrIo1Ga5D4IYYEM21UVPyQFSe8gmfOt7dlmnHmGLJOSvmyY7s7MfSeA496S4fLfC/74Ll1MLvV+AAAAAElFTkSuQmCC);
 }
 .empty > .name_wrapper > .name > .expand_button {
-	display: none !important;
+    display: none !important;
 }
 .object > .name_wrapper > .name,
 .array > .name_wrapper > .name {
-	cursor: pointer;
+    cursor: pointer;
 }
 .value { 
     vertical-align: top;

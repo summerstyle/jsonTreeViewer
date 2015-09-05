@@ -1,95 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>jsonTreeViewer</title>
-	<meta charset="utf-8" />
-	<link href="main.css" type="text/css" rel="stylesheet" />
-	<link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon" />
-	<!--
-		JSON Tree Viewer
-		http://github.com/summerstyle/jsonTreeViewer
-		
-		Copyright 2014 Vera Lobacheva (summerstyle.ru)
-		Released under the GPL3 (GPL3.txt)
-		
-		Sun 27 2014 20:15:00 GMT+0400
-	-->
+    <title>jsonTreeViewer</title>
+    <meta charset="utf-8" />
+    <link href="main.css" type="text/css" rel="stylesheet" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon" />
+    <!--
+        JSON Tree Viewer
+        http://github.com/summerstyle/jsonTreeViewer
+        
+        Copyright 2015 Vera Lobacheva (summerstyle.ru)
+        Released under the GPL3 (GPL3.txt)
+        
+        Sun 27 2014 20:15:00 GMT+0400
+    -->
 </head>
 <body>
-<noscript>
-	<div id="noscript">
-		Please, enable javascript in your browser
-	</div>
-</noscript>
-
-<!-- Buttons -->
-<header id="header">
-	<h1 id="logo">
-		<a href="http://github.com/summerstyle/jsonTreeViewer">
-			<img alt="jsKeysConfig" src="data:image/png;base64,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" />
-		</a>                                    
-	</h1>
-	<nav id="nav" class="clearfix">
-		<ul>
-			<li id="load_button"><a href="#">load</a></li>
-			<li id="expand_button"><a href="#">expand all</a></li>
-			<li id="collapse_button"><a href="#">collapse all</a></li>
-			<li id="help_button"><a href="#">?</a></li>
-		</ul>
-	</nav>
-	<div id="coords"></div>
-	<div id="debug"></div>
-</header>
-
-<!-- json tree -->
-<div id="wrapper">
-
-	<ul id="tree" class="clearfix">
-		
-	</ul>
-
-</div>
-
-
-<!-- Help block -->
-<div id="overlay"></div>
-<div id="help">
-    <span class="close_button"></span>
-    <div class="txt">
-        <section>
-            <h2>1. Load json</h2>
-            <p>
-				Click on "load" button
-			</p>
-        </section>
-		<section>
-            <h2>2. Expand/collapse nodes</h2>
-            <p>
-				By click on properties names or recursive by click on
-				"expand all" and "collapse all" buttons
-			</p>
-        </section>
+    <noscript>
+        <div id="noscript">
+        Please, enable javascript in your browser
+        </div>
+    </noscript>
+    
+    <!-- Buttons -->
+    <header id="header">
+        <h1 id="logo">
+            <a href="http://github.com/summerstyle/jsonTreeViewer">
+                <img alt="jsKeysConfig" src="data:image/png;base64,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" />
+            </a>
+        </h1>
+        <nav id="nav" class="clearfix">
+            <ul>
+                <li id="load_button"><a href="#">load</a></li>
+                <li id="expand_button"><a href="#">expand all</a></li>
+                <li id="collapse_button"><a href="#">collapse all</a></li>
+                <li id="help_button"><a href="#">?</a></li>
+            </ul>
+        </nav>
+        <div id="coords"></div>
+        <div id="debug"></div>
+    </header>
+    
+    <!-- json tree -->
+    <div id="wrapper">
+    
+        <ul id="tree" class="clearfix">
+        
+        </ul>
+    
     </div>
-    <footer>
-        <a href="http://github.com/summerstyle/jsonTreeViewer">jsonTreeViewer</a><br />
-        &copy; 2015 Vera Lobacheva<br />
-        GPL3 License
-    </footer>
-</div>
-
-<!-- Load json block -->
-<div id="load_json_wrapper">
-	<form id="load_json_form">
-		<h5>Load json</h5>
-		<span class="close_button" title="close"></span>
-		<p>
-			<label for="code_input">JSON:</label>
-			<textarea id="code_input"></textarea>
-		</p>
-		<button id="load_code_button">Load</button>
-	</form>
-</div>
-
-<script src="jsonTreeViewer.js"></script>
+    
+    
+    <!-- Help block -->
+    <div id="overlay"></div>
+    <div id="help">
+        <span class="close_button"></span>
+        <div class="txt">
+            <section>
+                <h2>1. Load json</h2>
+                <p>
+                    Click on "load" button
+                </p>
+            </section>
+            <section>
+                <h2>2. Expand/collapse nodes</h2>
+                <p>
+                    By click on properties names or recursive by click on
+                    "expand all" and "collapse all" buttons
+                </p>
+            </section>
+        </div>
+        <footer>
+            <a href="http://github.com/summerstyle/jsonTreeViewer">jsonTreeViewer</a><br />
+            &copy; 2015 Vera Lobacheva<br />
+            GPL3 License
+        </footer>
+    </div>
+    
+    <!-- Load json block -->
+    <div id="load_json_wrapper">
+        <form id="load_json_form">
+            <h5>Load json</h5>
+            <span class="close_button" title="close"></span>
+            <p>
+                <label for="code_input">JSON:</label>
+                <textarea id="code_input"></textarea>
+            </p>
+            <button id="load_code_button">Load</button>
+        </form>
+    </div>
+    
+    <script src="jsonTreeViewer.js"></script>
 </body>
 </html>
