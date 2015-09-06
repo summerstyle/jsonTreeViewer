@@ -4,8 +4,6 @@
  *
  * Copyright 2015 Vera Lobacheva (summerstyle.ru)
  * Released under the GPL3 (GPL3.txt)
- *
- * Sun 27 2014 20:15:00 GMT+0400
  */
 
 'use strict';
@@ -13,23 +11,9 @@
 var jsonTreeViewer = (function() {
 
     /* Utilities */
-    var utils = {
-        
-        id : function (str) {
-            return document.getElementById(str);
-        },
-        
-        hide : function(node) {
-            node.style.display = 'none';
-            
-            return this;
-        },
-        
-        show : function(node) {
-            node.style.display = 'block';
-            
-            return this;
-        },
+    var utils = App.utils;
+    
+    utils.own = {
         
         /* JSON data types */
         is_string : function(x) {
@@ -86,8 +70,7 @@ var jsonTreeViewer = (function() {
         },
         
         foreach : function(obj, func) {
-            
-            var type = utils.get_type(obj),
+            var type = utils.own.get_type(obj),
                 is_last = false,
                 last;
         
@@ -123,36 +106,12 @@ var jsonTreeViewer = (function() {
                     break;
             }
             
-        },
-        
-        add_node_from_html : function(parent, html) {
-            
-            var div = document.createElement('div');
-            
-            parent.appendChild(div);
-            
-            div.outerHTML = html;
-            
-        },
-        
-        inherits : (function() {
-            
-            var F = function() {};
-            
-            return function(Child, Parent) {
-                F.prototype = Parent.prototype;
-                Child.prototype = new F();
-                Child.prototype.constructor = Child;
-            }
-            
-        })()
+        }
     };
-
     
     /* Node's factory */
     function Node(name, node, is_last) {
-        
-        var type = utils.get_type(node);
+        var type = utils.own.get_type(node);
         
         switch (type) {
             case 'boolean':
@@ -182,7 +141,6 @@ var jsonTreeViewer = (function() {
     
     /* Simple type's constructor (string, number, boolean, null) */
     function Node_simple(name, value, is_last) {
-        
         var self     = this,
             el       = document.createElement('li'),
             template = function(name, value) {
@@ -248,7 +206,6 @@ var jsonTreeViewer = (function() {
     
     /* Complex node's constructor (object, array) */
     function Node_complex(name, value, is_last) {
-        
         var self     = this,
             el       = document.createElement('li'),
             template = function(name, sym) {
@@ -301,7 +258,7 @@ var jsonTreeViewer = (function() {
         self.children = children;
         self.children_ul = children_ul;
         
-        utils.foreach(value, function(node, name, is_last) {
+        utils.own.foreach(value, function(node, name, is_last) {
             var child = new Node(name, node, is_last);
             
             self.add_child(child);
@@ -315,7 +272,6 @@ var jsonTreeViewer = (function() {
     }
     
     Node_complex.prototype = {
-        
         constructor : Node_complex,
         
         add_child : function(child) {
@@ -331,7 +287,7 @@ var jsonTreeViewer = (function() {
             }
             
             if (is_recursive) {
-                utils.foreach(children, function(item, i) {
+                utils.own.foreach(children, function(item, i) {
                     if (typeof item.expand === 'function') {
                         item.expand(is_recursive);
                     }
@@ -347,7 +303,7 @@ var jsonTreeViewer = (function() {
             }
             
             if (is_recursive) {
-                utils.foreach(children, function(item, i) {
+                utils.own.foreach(children, function(item, i) {
                     if (typeof item.collapse === 'function') {
                         item.collapse(is_recursive);
                     }
@@ -384,7 +340,6 @@ var jsonTreeViewer = (function() {
     
     /* Tree */
     var tree = (function() {
-        
         var el = document.getElementById("tree"),
             root = null;
         
@@ -410,136 +365,56 @@ var jsonTreeViewer = (function() {
         };
         
     })();
-
     
-    /* Buttons and actions */
-    var buttons = (function() {
-        
-        var all = document.getElementById('nav').getElementsByTagName('li'),
-            load = document.getElementById('load_button'),
-            expand = document.getElementById('expand_button'),
-            collapse = document.getElementById('collapse_button'),
-            show_help = document.getElementById('help_button');
-        
-        function deselectAll() {
-            utils.foreach(all, function(x) {
-                x.classList.remove('selected');
-            });
-        }
-        
-        function selectOne(button) {
-            deselectAll();
-            button.classList.add('selected');
-        }
-        
-        /* Load button */
-        function onLoadButtonClick(e) {
+    
+    // Menu
+    var menu = new App.Menu(utils.dom.id('nav'), {
+        'load_button' : function() {
             load_json_form.show();
-            
-            e.preventDefault();
-        }
-        
-        /* Expand button */
-        function onExpandButtonClick(e) {
+        },
+        'expand_button' : function() {
             tree.expand();
-            
-            e.preventDefault();
-        }
-        
-        /* Collapse button */
-        function onCollapseButtonClick(e) {
+        },
+        'collapse_button' : function() {
             tree.collapse();
-            
-            e.preventDefault();
-        }
-        
-        /* Help button */
-        function onShowHelpButtonClick(e) {
+        },
+        'help_button' : function() {
             help.show();
-            
-            e.preventDefault();
-        }
-        
-        load.addEventListener('click', onLoadButtonClick, false);
-        expand.addEventListener('click', onExpandButtonClick, false);
-        collapse.addEventListener('click', onCollapseButtonClick, false);
-        show_help.addEventListener('click', onShowHelpButtonClick, false);
-        
-    })();
+        } 
+    });
 
 
     /* Load json form */
-    var load_json_form = (function() {
-        
-        var form = document.getElementById('load_json_wrapper'),
-            code_input = document.getElementById('code_input'),
-            load_button = document.getElementById('load_code_button'),
-            close_button = form.querySelector('.close_button'),
-            overlay = document.getElementById('overlay');
-        
-        function load(e) {
-            jsonTreeViewer.parse(code_input.value);
-            hide();
-        
-            e.preventDefault();
-        }
-        
-        function hide() {
-            utils.hide(form);
-            utils.hide(overlay);
-        }
-        
-        load_button.addEventListener('click', load, false);
-        
-        close_button.addEventListener('click', hide, false);
-        
-        overlay.addEventListener('click', hide, false);
-        
-        return {
-            show : function() {
-                code_input.value = '';
-                utils.show(form);
-                utils.show(overlay);
-            },
+    var load_json_form = new App.Window({
+        content_el : utils.dom.id('load_json_form'),
+        overlay : true,
+        js_module : function(self) {
+            var form = self.content_el,
+                code_input = document.getElementById('code_input'),
+                load_button = document.getElementById('load_code_button');
             
-            hide : hide
-        };
-        
-    })();
+            function load(e) {
+                jsonTreeViewer.parse(code_input.value);
+                self.hide();
+                code_input.value = '';
+            
+                e.preventDefault();
+            }
+            
+            load_button.addEventListener('click', load, false);
+        }
+    });
     
     
     /* Help block */
-    var help = (function() {
-        
-        var block = document.getElementById('help'),
-            overlay = document.getElementById('overlay'),
-            close_button = block.querySelector('.close_button');
-        
-        function hide() {
-            utils.hide(block);
-            utils.hide(overlay);
-        }
-        
-        function show() {
-            utils.show(block);
-            utils.show(overlay);
-        }
-        
-        overlay.addEventListener('click', hide, false);
-        
-        close_button.addEventListener('click', hide, false);
-        
-        return {
-            show : show,
-            hide : hide
-        };
-        
-    })();
+    var help = new App.Window({
+        content_el : document.getElementById('help'),
+        overlay : true
+    });
     
     
     return {
         parse : function(json_str) {
-            
             var temp;
             
             try {
@@ -549,11 +424,6 @@ var jsonTreeViewer = (function() {
             }
             
             tree.set_root(new Node(null, temp, 'last'));
-            
         }
     };
 })();
-
-var example = '{"firstName": "John","lastName": "Smith","isAlive": true,"age": 25,"company": null,"height_cm": 167.64,"address": {"streetAddress": "21 2nd Street","city": "New York","state": "NY","postalCode": "10021-3100"},"phoneNumbers": [{ "type": "home", "number": "212 555-1234" },{ "type": "fax",  "number": "646 555-4567" }]}';
-
-jsonTreeViewer.parse(example);
