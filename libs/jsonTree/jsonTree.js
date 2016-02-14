@@ -1,0 +1,597 @@
+/**
+ * JSON Tree library (a part of jsonTreeViewer)
+ * http://github.com/summerstyle/jsonTreeViewer
+ *
+ * Copyright 2016 Vera Lobacheva (http://iamvera.com)
+ * Released under the MIT license (LICENSE.txt)
+ */
+
+var jsonTree = (function() {
+    
+    /* ---------- Utilities ---------- */
+    var utils = {
+        
+        /*
+         * Returns js-"class" of value
+         * 
+         * @param val {any type} - value
+         * @returns {string} - for example, "[object Function]"
+         */
+        getClass : function(val) {
+            return Object.prototype.toString.call(val);
+        },
+        
+        /**
+         * Checks for a type of value (for valid JSON data types).
+         * In other cases - throws an exception
+         * 
+         * @param val {any type} - the value for new node
+         * @returns {string} ("object" | "array" | "null" | "boolean" | "number" | "string")
+         */
+        getType : function(val) {
+            if (val === null) {
+                return 'null';
+            }
+            
+            switch (typeof val) {
+                case 'number':
+                    return 'number';
+                
+                case 'string':
+                    return 'string';
+                
+                case 'boolean':
+                    return 'boolean';
+            }
+            
+            switch(utils.getClass(val)) {
+                case '[object Array]':
+                    return 'array';
+                
+                case '[object Object]':
+                    return 'object';
+            }
+            
+            throw new Error('Bad type: ' + utils.getClass(val));
+        },
+        
+        /**
+         * Applies for each item of list some function
+         * and checks for last element of the list
+         * 
+         * @param obj {Object | Array} - a list or a dict with child nodes
+         * @param func {Function} - the function for each item
+         */
+        forEachNode : function(obj, func) {
+            var type = utils.getType(obj),
+                isLast;
+        
+            switch (type) {
+                case 'array':
+                    isLast = obj.length - 1;
+                    
+                    obj.forEach(function(item, i) {
+                        func(i, item, i === isLast);
+                    });
+                    
+                    break;
+                
+                case 'object':
+                    var keys = Object.keys(obj);
+                    
+                    isLast = keys.length - 1;
+                    
+                    keys.forEach(function(item, i) {
+                        func(item, obj[item], i === isLast);
+                    });
+                    
+                    break;
+            }
+            
+        },
+        
+        /**
+         * Implements the kind of an inheritance by
+         * using parent prototype and
+         * creating intermediate constructor
+         * 
+         * @param Child {Function} - a child constructor
+         * @param Parent {Function} - a parent constructor
+         */
+        inherits : (function() {
+            var F = function() {};
+            
+            return function(Child, Parent) {
+                F.prototype = Parent.prototype;
+                Child.prototype = new F();
+                Child.prototype.constructor = Child;
+            };
+        })(),
+        
+        /*
+         * Checks for a valid type of root node*
+         * 
+         * @returns {boolean} true for an object ar an array
+         */
+        isValidRoot : function(jsonObj) {
+            switch (utils.getType(jsonObj)) {
+                case 'object':
+                case 'array':
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    };
+    
+    
+    /* ---------- Node constructors ---------- */
+    
+    /**
+     * The factory for creating nodes of defined type.
+     * 
+     * ~~~ Node ~~~ is a structure element of an onject or an array
+     * with own name (a key of an object or an index of an array)
+     * and value of any json data type. The root object or array
+     * is a node without name.
+     * {...
+     * [+] "name": value,
+     * ...}
+     * 
+     * Markup:
+     * <li class="node (object|array|boolean|null|number|string) [expanded]">
+     *     <span class="name_wrapper">
+     *         <span class="name">
+     *             <span class="expand_button" />
+     *             "name"
+     *         </span>
+     *         :
+     *     </span>
+     *     <(div|span) class="value">
+     *         ...
+     *     </(div|span)>
+     * </li>
+     *
+     * @param name {string} - key name
+     * @param val {Object | Array | string | number | boolean | null} - a value of node
+     * @param isLast {boolean} - true if node is last in list of parent children
+     * 
+     * @return {Node}
+     */
+    function Node(name, val, isLast) {
+        var nodeType = utils.getType(val);
+        
+        if (nodeType in Node.CONSTRUCTORS_MAPPING) {
+            return new Node.CONSTRUCTORS_MAPPING[nodeType](name, val, isLast);
+        } else {
+            throw new Error('Bad type: ' + utils.getClass(val));
+        }
+    }
+    
+    Node.CONSTRUCTORS_MAPPING = {
+        'boolean': NodeBoolean,
+        'number' : NodeNumber,
+        'string' : NodeString,
+        'null'   : NodeNull,
+        'object' : NodeObject,
+        'array'  : NodeArray  
+    };
+    
+    
+    /*
+     * The constructor for simple types (string, number, boolean, null)
+     * {...
+     * [+] "name": value,
+     * ...}
+     * value = string || number || boolean || null
+     *
+     * Markup:
+     * <li class="node (number|boolean|string|null)">
+     *     <span class="name_wrapper">
+     *         <span class="name">"age"</span>
+     *         :
+     *     </span>
+     *     <span class="value">25</span>
+     *     ,
+     * </li>
+     *
+     * @abstract
+     * @param name {string} - key name
+     * @param val {string | number | boolean | null} - a value of simple types
+     * @param isLast {boolean} - true if node is last in list of parent children
+     */
+    function _NodeSimple(name, val, isLast) {
+        if (this.constructor === _NodeSimple) {
+            throw new Error('This is abstract class');
+        }
+        
+        var self = this,
+            el = document.createElement('li'),
+            template = function(name, val) {
+                var str = '\
+                    <span class="name_wrapper">\
+                        <span class="name">"' +
+                            name +
+                        '"</span> : \
+                    </span>\
+                    <span class="value">' +
+                        val +
+                    '</span>';
+    
+                if (!isLast) {
+                    str += ',';
+                }
+    
+                return str;
+            };
+    
+        el.classList.add('node');
+        el.classList.add(this.type);
+        el.innerHTML = template(name, val);
+    
+        self.el = el;
+    }
+    
+    
+    /*
+     * The constructor for boolean values
+     * {...
+     * [+] "name": boolean,
+     * ...}
+     * boolean = true || false
+     *
+     * @constructor
+     * @param name {string} - key name
+     * @param val {boolean} - value of boolean type, true or false
+     * @param isLast {boolean} - true if node is last in list of parent children
+     */
+    function NodeBoolean(name, val, isLast) {
+        this.type = "boolean";
+    
+        _NodeSimple.call(this, name, val, isLast);
+    }
+    
+    
+    /*
+     * The constructor for number values
+     * {...
+     * [+] "name": number,
+     * ...}
+     * number = 123
+     *
+     * @constructor
+     * @param name {string} - key name
+     * @param val {number} - value of number type, for example 123
+     * @param isLast {boolean} - true if node is last in list of parent children
+     */
+    function NodeNumber(name, val, isLast) {
+        this.type = "number";
+    
+        _NodeSimple.call(this, name, val, isLast);
+    }
+    
+    
+    /*
+     * The constructor for string values
+     * {...
+     * [+] "name": string,
+     * ...}
+     * string = "abc"
+     *
+     * @constructor
+     * @param name {string} - key name
+     * @param val {string} - value of string type, for example "abc"
+     * @param isLast {boolean} - true if node is last in list of parent children
+     */
+    function NodeString(name, val, isLast) {
+        this.type = "string";
+    
+        _NodeSimple.call(this, name, '"' + val + '"', isLast);
+    }
+    
+    
+    /*
+     * The constructor for null values
+     * {...
+     * [+] "name": null,
+     * ...}
+     *
+     * @constructor
+     * @param name {string} - key name
+     * @param val {null} - value (only null)
+     * @param isLast {boolean} - true if node is last in list of parent children
+     */
+    function NodeNull(name, val, isLast) {
+        this.type = "null";
+    
+        _NodeSimple.call(this, name, val, isLast);
+    }
+    
+    
+    /*
+     * The constructor for complex types (object, array)
+     * {...
+     * [+] "name": value,
+     * ...}
+     * value = object || array
+     *
+     * Markup:
+     * <li class="node (object|array) [expanded]">
+     *     <span class="name_wrapper">
+     *         <span class="name">
+     *             <span class="expand_button" />
+     *             "name"
+     *         </span>
+     *         :
+     *     </span>
+     *     <div class="value">
+     *         <b>{</b>
+     *         <ul class="children" />
+     *         <b>}</b>
+     *         ,
+     *     </div>
+     * </li>
+     *
+     * @abstract
+     * @param name {string} - key name
+     * @param val {Object | Array} - a value of complex types, object or array
+     * @param isLast {boolean} - true if node is last in list of parent children
+     */
+    function _NodeComplex(name, val, isLast) {
+        if (this.constructor === _NodeComplex) {
+            throw new Error('This is abstract class');
+        }
+        
+        var self = this,
+            el = document.createElement('li'),
+            template = function(name, sym) {
+                var comma = (!isLast) ? ',' : '',
+                    str = '\
+                        <div class="value">\
+                            <b>' + sym[0] + '</b>\
+                            <ul class="children"></ul>\
+                            <b>' + sym[1] + '</b>'
+                            + comma +
+                        '</div>';
+    
+                if (name !== null) {
+                    str = '\
+                        <span class="name_wrapper">\
+                            <span class="name">' +
+                                '<span class="expand_button"></span>' +
+                                '"' + name +
+                            '"</span> : \
+                        </span>' + str;
+                }
+    
+                return str;
+            },
+            childrenUl,
+            nameEl,
+            children = [];
+    
+        el.classList.add('node');
+        el.classList.add(this.type);
+        el.innerHTML = template(name, self.sym);
+    
+        childrenUl = el.querySelector('.children');
+    
+        if (name !== null) {
+            nameEl = el.querySelector('.name');
+    
+            nameEl.addEventListener('click', function() {
+                self.toggle();
+            }, false);
+    
+            self.isRoot = false;
+        } else {
+            self.isRoot = true;
+    
+            el.classList.add('expanded');
+        }
+    
+        self.el = el;
+        self.children = children;
+        self.childrenUl = childrenUl;
+    
+        utils.forEachNode(val, function(name, node, isLast) {
+            self.addChild(new Node(name, node, isLast));
+        });
+    
+        self.isEmpty = !Boolean(children.length);
+        if (self.isEmpty) {
+            el.classList.add('empty');
+        }
+    }
+    
+    _NodeComplex.prototype = {
+        constructor : _NodeComplex,
+        
+        /*
+         * Add child node to list of children
+         *
+         * @param child {Node} - child node
+         */
+        addChild : function(child) {
+            this.children.push(child);
+            this.childrenUl.appendChild(child.el);
+        },
+    
+        /*
+         * Expands this list of node children
+         *
+         * @param isRecursive {boolean} - if true, expands all child nodes
+         */
+        expand : function(isRecursive){
+            if (!this.isRoot) {
+                this.el.classList.add('expanded');
+            }
+    
+            if (isRecursive) {
+                this.children.forEach(function(item, i) {
+                    if (typeof item.expand === 'function') {
+                        item.expand(isRecursive);
+                    }
+                });
+            }
+        },
+    
+        /*
+         * Collapses this list of node children
+         *
+         * @param isRecursive {boolean} - if true, collapses all child nodes
+         */
+        collapse : function(isRecursive) {
+            if (!this.isRoot) {
+                this.el.classList.remove('expanded');
+            }
+    
+            if (isRecursive) {
+                this.children.forEach(function(item, i) {
+                    if (typeof item.collapse === 'function') {
+                        item.collapse(isRecursive);
+                    }
+                });
+            }
+        },
+    
+        /*
+         * Expands collapsed or collapses expanded node
+         */
+        toggle : function() {
+            this.el.classList.toggle('expanded');
+        }
+    };
+    
+    
+    /*
+     * The constructor for object values
+     * {...
+     * [+] "name": object,
+     * ...}
+     * object = {"abc": "def"}
+     *
+     * @constructor
+     * @param name {string} - key name
+     * @param val {Object} - value of object type, {"abc": "def"}
+     * @param isLast {boolean} - true if node is last in list of parent children
+     */
+    function NodeObject(name, val, isLast) {
+        this.sym = ['{', '}'];
+        this.type = "object";
+    
+        _NodeComplex.call(this, name, val, isLast);
+    }
+    utils.inherits(NodeObject,_NodeComplex);
+    
+    
+    /*
+     * The constructor for array values
+     * {...
+     * [+] "name": array,
+     * ...}
+     * array = [1,2,3]
+     *
+     * @constructor
+     * @param name {string} - key name
+     * @param val {Array} - value of array type, [1,2,3]
+     * @param isLast {boolean} - true if node is last in list of parent children
+     */
+    function NodeArray(name, val, isLast) {
+        this.sym = ['[', ']'];
+        this.type = "array";
+    
+        _NodeComplex.call(this, name, val, isLast);
+    }
+    utils.inherits(NodeArray, _NodeComplex);
+    
+    
+    /* ---------- The tree constructor ---------- */
+    
+    /*
+     * The constructor for json tree.
+     * It contains only one Node (Array or Object), without property name.
+     * CSS-styles of .tree define main tree styles like font-family,
+     * font-size and own margins.
+     *
+     * Markup:
+     * <ul class="tree clearfix">
+     *     {Node}
+     * </ul>
+     *
+     * @constructor
+     * @param jsonObj {Object | Array} - data for tree
+     * @param domEl {DOMElement} - DOM-element, wrapper for tree
+     */
+    function Tree(jsonObj, domEl) {
+        this.wrapper = document.createElement('ul');
+        this.wrapper.className = 'tree clearfix';
+        
+        this.rootNode = null;
+        
+        this.loadData(jsonObj);
+        this.appendTo(domEl);
+    }
+    
+    Tree.prototype = {
+        constructor : Tree,
+        
+        /**
+         * Fill new data in current json tree
+         *
+         * @param {Object | Array} jsonObj - json-data
+         */
+        loadData : function(jsonObj) {
+            if (!utils.isValidRoot(jsonObj)) {
+                alert('The root should be an object or an array');
+                return;
+            }
+            
+            this.rootNode = new Node(null, jsonObj, 'last');
+            this.wrapper.innerHTML = '';
+            this.wrapper.appendChild(this.rootNode.el);
+        },
+        
+        /**
+         * Appends tree to DOM-element (or move it to new place)
+         *
+         * @param domEl {DOMElement} 
+         */
+        appendTo : function(domEl) {
+            domEl.appendChild(this.wrapper);
+        },
+        
+        /**
+         * Expands all tree nodes (objects or arrays) recursively
+         */
+        expand : function() {
+            if (typeof this.rootNode.expand === 'function') {
+                this.rootNode.expand('recursive');
+            }
+        },
+       
+        /**
+         * Collapses all tree nodes (objects or arrays) recursively
+         */
+        collapse : function() {
+            if (typeof this.rootNode.collapse === 'function') {
+                this.rootNode.collapse('recursive');
+            }
+        }
+    };
+
+    
+    /* ---------- Public methods ---------- */
+    return {
+        /**
+         * Creates new tree by data and appends it to the DOM-element
+         * 
+         * @param jsonObj {Object | Array} - json-data
+         * @param domEl {DOMElement} - the wrapper element
+         * @returns {Tree}
+         */
+        create : function(jsonObj, domEl) {
+            return new Tree(jsonObj, domEl);
+        }
+    };
+})();

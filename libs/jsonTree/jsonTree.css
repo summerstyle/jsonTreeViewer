@@ -2,21 +2,19 @@
  * JSON Tree Viewer
  * http://github.com/summerstyle/jsonTreeViewer
  *
- * Copyright 2015 Vera Lobacheva (summerstyle.ru)
- * Released under the GPL3 (GPL3.txt)
+ * Copyright 2016 Vera Lobacheva (http://iamvera.com)
+ * Released under the MIT license (LICENSE.txt)
  */
-#tree {
+.tree {
     margin-left: 30px;
     font-family: 'PT Mono', monospace;
     font-size: 14px;
 }
-#tree ul {
+.children {
+    display: none;
     margin-left: 35px; 
     margin-bottom: 5px;
     line-height: 2;
-}
-.children {
-    display: none;
 }
 .expanded > .value > .children {
     display: block;

@@ -6,15 +6,15 @@
     
     <link href="libs/app/reset.css" rel="stylesheet" />
     <link href="libs/app/app.css" rel="stylesheet" />
+    <link href="libs/jsonTree/jsonTree.css" rel="stylesheet" />
     
-    <link href="main.css" type="text/css" rel="stylesheet" />
     <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon" />
     <!--
         JSON Tree Viewer
         http://github.com/summerstyle/jsonTreeViewer
         
-        Copyright 2015 Vera Lobacheva (summerstyle.ru)
-        Released under the GPL3 (GPL3.txt)
+        Copyright 2016 Vera Lobacheva (http://iamvera.com)
+        Released under the MIT license (LICENSE.txt)
     -->
 </head>
 <body>
@@ -54,7 +54,7 @@
     <!-- json tree -->
     <div id="wrapper">
     
-        <ul id="tree" class="clearfix"></ul>
+        <div id="tree"></div>
     
     </div>
        
@@ -64,7 +64,7 @@
             <section>
                 <h5>1. Load json</h5>
                 <p>
-                    Click on "load" button
+                    Click on "load" button and load a json-string in opened form
                 </p>
             </section>
             <section>
@@ -96,6 +96,7 @@
     </form>
     
     <script src="libs/app/App.js"></script>
+    <script src="libs/jsonTree/jsonTree.js"></script>
     <script src="jsonTreeViewer.js"></script>
     <script>
         var example = '{\
