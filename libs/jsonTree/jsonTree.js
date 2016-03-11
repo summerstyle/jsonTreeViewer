@@ -349,6 +349,7 @@ var jsonTree = (function() {
                     str = '\
                         <div class="value">\
                             <b>' + sym[0] + '</b>\
+                            <span class="show_more">&hellip;</span>\
                             <ul class="children"></ul>\
                             <b>' + sym[1] + '</b>'
                             + comma +
@@ -378,8 +379,13 @@ var jsonTree = (function() {
     
         if (name !== null) {
             nameEl = el.querySelector('.name');
+            moreContentEl = el.querySelector('.show_more');
     
             nameEl.addEventListener('click', function() {
+                self.toggle();
+            }, false);
+            
+            moreContentEl.addEventListener('click', function() {
                 self.toggle();
             }, false);
     

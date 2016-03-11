@@ -43,6 +43,12 @@
     background: #FFF;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gUBFAwe2SlGKQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAARUlEQVQI132PwQ3AMAwCjdWd8QhMbfrIo1Ga5D4IYYEM21UVPyQFSe8gmfOt7dlmnHmGLJOSvmyY7s7MfSeA496S4fLfC/74Ll1MLvV+AAAAAElFTkSuQmCC);
 }
+.show_more {
+    cursor: pointer;
+}
+.expanded > .value > .show_more {
+    display: none;
+}
 .empty > .name_wrapper > .name > .expand_button {
     display: none !important;
 }
