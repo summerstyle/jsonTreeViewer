@@ -381,12 +381,12 @@ var jsonTree = (function() {
             nameEl = el.querySelector('.name');
             moreContentEl = el.querySelector('.show_more');
     
-            nameEl.addEventListener('click', function() {
-                self.toggle();
+            nameEl.addEventListener('click', function(e) {
+                self.toggle(e.shiftKey);
             }, false);
             
-            moreContentEl.addEventListener('click', function() {
-                self.toggle();
+            moreContentEl.addEventListener('click', function(e) {
+                self.toggle(e.shiftKey);
             }, false);
     
             self.isRoot = false;
@@ -463,9 +463,22 @@ var jsonTree = (function() {
     
         /*
          * Expands collapsed or collapses expanded node
+         *
+         * @param {boolean} isRecursive - Expand all children nodes if this node is expanded
+         *                                and collapse it otherwise
          */
-        toggle : function() {
+        toggle : function(isRecursive) {
             this.el.classList.toggle('expanded');
+            
+            if (isRecursive) {
+                var isExpanded = this.el.classList.contains('expanded');
+                
+                this.children.forEach(function(item, i) {
+                    if (typeof item.toggle === 'function') {
+                        item[isExpanded ? 'expand' : 'collapse'](isRecursive);
+                    }
+                });
+            }
         }
     };
     

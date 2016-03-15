@@ -8,8 +8,9 @@ A simple json formatter/viewer based on [jsonTree library] (#jsontree-library) a
 
 [http://github.com/summerstyle/jsonTreeViewer] (http://github.com/summerstyle/jsonTreeViewer)
 
-1. Load json: click on "load" button and load a json-string in opened form.
-2. Expand/collapse nodes: by click on properties names or recursively by click on "expand all" and "collapse all" buttons
+1. Load json: click on "load" button and load a json-string to opened form
+2. Expand/collapse single nodes by click on properties names (recursively - by SHIFT + click)
+3. Expand/collapse all tree nodes by click on "expand all" and "collapse all" buttons
 
 
 ###jsonTree library
