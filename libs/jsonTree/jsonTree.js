@@ -429,6 +429,10 @@ var jsonTree = (function() {
          * @param isRecursive {boolean} - if true, expands all child nodes
          */
         expand : function(isRecursive){
+            if (this.isEmpty) {
+                return;
+            }
+            
             if (!this.isRoot) {
                 this.el.classList.add('expanded');
             }
@@ -448,6 +452,10 @@ var jsonTree = (function() {
          * @param isRecursive {boolean} - if true, collapses all child nodes
          */
         collapse : function(isRecursive) {
+            if (this.isEmpty) {
+                return;
+            }
+            
             if (!this.isRoot) {
                 this.el.classList.remove('expanded');
             }
@@ -468,6 +476,10 @@ var jsonTree = (function() {
          *                                and collapse it otherwise
          */
         toggle : function(isRecursive) {
+            if (this.isEmpty) {
+                return;
+            }
+            
             this.el.classList.toggle('expanded');
             
             if (isRecursive) {

@@ -49,12 +49,16 @@
 .expanded > .value > .show_more {
     display: none;
 }
-.empty > .name_wrapper > .name > .expand_button {
+.empty > .name_wrapper > .name > .expand_button,
+.empty > .value > .show_more {
     display: none !important;
 }
 .object > .name_wrapper > .name,
 .array > .name_wrapper > .name {
     cursor: pointer;
+}
+.empty > .name_wrapper > .name {
+    cursor: default !important;
 }
 .value { 
     vertical-align: top;
