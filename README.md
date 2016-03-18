@@ -15,9 +15,12 @@ A simple json formatter/viewer based on [jsonTree library] (#jsontree-library) a
 
 ###jsonTree library
 
-Gets json-object and draws tree of json nodes.
-Includes 2 files - jsonTree.js and jsonTree.css.
-You can get json-object from json-string by `JSON.parse(str)` method. 
+A simple lightweight pure-javascript library for drawing tree of json-nodes from json-object.
+You can get json-object from json-string by `JSON.parse(str)` method.
+
+The library includes 2 files - `libs/jsonTree/jsonTree.js` (18 KB) and `libs/jsonTree/jsonTree.css` (2 KB).
+
+Demo: http://summerstyle.github.io/jsonTreeViewer/
 
 #####How to use:
 
@@ -38,6 +41,9 @@ var data = {
     ]
 };
 var tree = jsonTree.create(data, wrapper);
+tree.expand(function(node) {
+   return node.children.length < 2 || node.label === 'phoneNumbers';
+}
 ```
 You can create many trees on one html-page.
 
@@ -45,5 +51,6 @@ You can create many trees on one html-page.
 
 * `loadData(jsonObj)` - Fill new data in current json tree
 * `appendTo(domEl)` - Appends tree to DOM-element (or move it to new place)
-* `expand()` - Expands all tree nodes (objects or arrays) recursively 
+* `expand()` - Expands all tree nodes (objects or arrays) recursively
+* `expand(filterFunc)` - Expands only selected (by filter function) child nodes of root element
 * `collapse()` - Collapses all tree nodes (objects or arrays) recursively

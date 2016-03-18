@@ -1,3 +1,9 @@
+### 0.4.0
+* Add filter function for expanding selected child nodes of root element
+* Disable expanding for empty nodes
+* Add recursive collapsing/expanding by SHIFT+click for single node
+* Add '…' ('show more') button for expanding of object or array nodes
+
 ### 0.3.0
 * Divide jsonTree library from jsonTreeViewer
 * Add documentation for jsonTree library to README.md

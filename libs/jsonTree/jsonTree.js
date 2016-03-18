@@ -110,8 +110,9 @@ var jsonTree = (function() {
         
         /*
          * Checks for a valid type of root node*
-         * 
-         * @returns {boolean} true for an object ar an array
+         *
+         * @param {any type} jsonObj - a value for root node
+         * @returns {boolean} - true for an object or an array, false otherwise
          */
         isValidRoot : function(jsonObj) {
             switch (utils.getType(jsonObj)) {
@@ -224,6 +225,9 @@ var jsonTree = (function() {
     
                 return str;
             };
+            
+        self.label = name;
+        self.isComplex = false;
     
         el.classList.add('node');
         el.classList.add(this.type);
@@ -371,6 +375,9 @@ var jsonTree = (function() {
             nameEl,
             children = [];
     
+        self.label = name;
+        self.isComplex = true;
+    
         el.classList.add('node');
         el.classList.add(this.type);
         el.innerHTML = template(name, self.sym);
@@ -439,7 +446,7 @@ var jsonTree = (function() {
     
             if (isRecursive) {
                 this.children.forEach(function(item, i) {
-                    if (typeof item.expand === 'function') {
+                    if (item.isComplex) {
                         item.expand(isRecursive);
                     }
                 });
@@ -462,7 +469,7 @@ var jsonTree = (function() {
     
             if (isRecursive) {
                 this.children.forEach(function(item, i) {
-                    if (typeof item.collapse === 'function') {
+                    if (item.isComplex) {
                         item.collapse(isRecursive);
                     }
                 });
@@ -486,7 +493,7 @@ var jsonTree = (function() {
                 var isExpanded = this.el.classList.contains('expanded');
                 
                 this.children.forEach(function(item, i) {
-                    if (typeof item.toggle === 'function') {
+                    if (item.isComplex) {
                         item[isExpanded ? 'expand' : 'collapse'](isRecursive);
                     }
                 });
@@ -586,7 +593,7 @@ var jsonTree = (function() {
         /**
          * Appends tree to DOM-element (or move it to new place)
          *
-         * @param domEl {DOMElement} 
+         * @param {DOMElement} domEl 
          */
         appendTo : function(domEl) {
             domEl.appendChild(this.wrapper);
@@ -594,10 +601,20 @@ var jsonTree = (function() {
         
         /**
          * Expands all tree nodes (objects or arrays) recursively
+         *
+         * @param {Function} filterFunc - returns true if this node should be expanded
          */
-        expand : function() {
-            if (typeof this.rootNode.expand === 'function') {
-                this.rootNode.expand('recursive');
+        expand : function(filterFunc) {
+            if (this.rootNode.isComplex) {
+                if (typeof filterFunc == 'function') {
+                    this.rootNode.children.forEach(function(item, i) {
+                        if (item.isComplex && filterFunc(item)) {
+                            item.expand();
+                        }
+                    });
+                } else {
+                    this.rootNode.expand('recursive');
+                }
             }
         },
        
