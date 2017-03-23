@@ -2,7 +2,7 @@
  * JSON Tree Viewer
  * http://github.com/summerstyle/jsonTreeViewer
  *
- * Copyright 2016 Vera Lobacheva (http://iamvera.com)
+ * Copyright 2017 Vera Lobacheva (http://iamvera.com)
  * Released under the MIT license (LICENSE.txt)
  */
 

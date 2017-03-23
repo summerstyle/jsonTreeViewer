@@ -1,10 +1,16 @@
-#jsonTreeViewer and jsonTree library
+# jsonTreeViewer and jsonTree library
 
 The library and the viewer released under the MIT license (LICENSE.txt).
 
-###jsonTreeViewer
+### jsonTreeViewer
 
-A simple json formatter/viewer based on [jsonTree library] (#jsontree-library) and [app.js] (https://github.com/summerstyle/app.js) framework.
+A simple json formatter/viewer based on [jsonTree library](#jsontree-library) and [app.js](https://github.com/summerstyle/app.js) framework.
+
+Clone with submodules (including App.js library):
+
+```
+git clone --recursive https://github.com/summerstyle/jsonTreeViewer.git
+```
 
 Online: http://summerstyle.github.io/jsonTreeViewer
 
@@ -13,19 +19,17 @@ Online: http://summerstyle.github.io/jsonTreeViewer
 3. Expand/collapse all tree nodes by click on "expand all" and "collapse all" buttons
 
 
-###jsonTree library (JSON pretty-printer)
+### jsonTree library (JSON pretty-printer)
 
 A simple lightweight pure-javascript library for drawing tree of json-nodes from json-object.
 You can get json-object from json-string by `JSON.parse(str)` method.
 
 Demo: http://summerstyle.github.io/jsonTreeViewer
 
-The library includes only 2 files - [`libs/jsonTree/jsonTree.js`]
-(https://github.com/summerstyle/jsonTreeViewer/blob/master/libs/jsonTree/jsonTree.js) (18 KB)
-and [`libs/jsonTree/jsonTree.css`]
-(https://github.com/summerstyle/jsonTreeViewer/blob/master/libs/jsonTree/jsonTree.css) (2 KB).
+The library includes only 2 files - [`libs/jsonTree/jsonTree.js`](https://github.com/summerstyle/jsonTreeViewer/blob/master/libs/jsonTree/jsonTree.js) (18 KB)
+and [`libs/jsonTree/jsonTree.css`](https://github.com/summerstyle/jsonTreeViewer/blob/master/libs/jsonTree/jsonTree.css) (2 KB).
 
-#####How to use:
+##### How to use:
 
 html:
 ```html
@@ -63,7 +67,7 @@ tree.expand(function(node) {
 ```
 You can create many trees on one html-page.
 
-#####The aviable methods of each json tree:
+##### The aviable methods of each json tree:
 
 * `loadData(jsonObj)` - Fill new data to current json tree
 * `appendTo(domEl)` - Appends tree to DOM-element (or move it to new place)
