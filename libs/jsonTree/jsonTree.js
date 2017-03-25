@@ -372,6 +372,7 @@ var jsonTree = (function() {
             },
             childNodesUl,
             labelEl,
+            moreContentEl,
             childNodes = [];
     
         self.label = label;
@@ -388,11 +389,11 @@ var jsonTree = (function() {
             moreContentEl = el.querySelector('.jsontree_show-more');
     
             labelEl.addEventListener('click', function(e) {
-                self.toggle(e.shiftKey);
+                self.toggle(e.ctrlKey || e.metaKey);
             }, false);
             
             moreContentEl.addEventListener('click', function(e) {
-                self.toggle(e.shiftKey);
+                self.toggle(e.ctrlKey || e.metaKey);
             }, false);
     
             self.isRoot = false;
