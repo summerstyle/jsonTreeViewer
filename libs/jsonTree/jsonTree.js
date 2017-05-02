@@ -162,14 +162,14 @@ var jsonTree = (function() {
     function Node(label, val, isLast) {
         var nodeType = utils.getType(val);
         
-        if (nodeType in Node.CONSTRUCTORS_MAPPING) {
-            return new Node.CONSTRUCTORS_MAPPING[nodeType](label, val, isLast);
+        if (nodeType in Node.CONSTRUCTORS) {
+            return new Node.CONSTRUCTORS[nodeType](label, val, isLast);
         } else {
             throw new Error('Bad type: ' + utils.getClass(val));
         }
     }
     
-    Node.CONSTRUCTORS_MAPPING = {
+    Node.CONSTRUCTORS = {
         'boolean': NodeBoolean,
         'number' : NodeNumber,
         'string' : NodeString,
@@ -208,6 +208,7 @@ var jsonTree = (function() {
         
         var self = this,
             el = document.createElement('li'),
+            labelEl,
             template = function(label, val) {
                 var str = '\
                     <span class="jsontree_label-wrapper">\
@@ -232,7 +233,27 @@ var jsonTree = (function() {
         el.innerHTML = template(label, val);
     
         self.el = el;
+
+        labelEl = el.querySelector('.jsontree_label');
+    
+        labelEl.addEventListener('click', function(e) {
+            if (e.altKey) {
+                self.toggleMarked();
+                return;
+            }
+        }, false);
     }
+
+    _NodeSimple.prototype = {
+        constructor : _NodeSimple,
+
+        /**
+         * Mark or unmark node
+         */
+         toggleMarked : function() {
+            this.el.classList.toggle('jsontree_node_marked');    
+         }
+    };
     
     
     /*
@@ -252,6 +273,7 @@ var jsonTree = (function() {
     
         _NodeSimple.call(this, label, val, isLast);
     }
+    utils.inherits(NodeBoolean,_NodeSimple);
     
     
     /*
@@ -271,6 +293,7 @@ var jsonTree = (function() {
     
         _NodeSimple.call(this, label, val, isLast);
     }
+    utils.inherits(NodeNumber,_NodeSimple);
     
     
     /*
@@ -290,6 +313,7 @@ var jsonTree = (function() {
     
         _NodeSimple.call(this, label, '"' + val + '"', isLast);
     }
+    utils.inherits(NodeString,_NodeSimple);
     
     
     /*
@@ -308,6 +332,7 @@ var jsonTree = (function() {
     
         _NodeSimple.call(this, label, val, isLast);
     }
+    utils.inherits(NodeNull,_NodeSimple);
     
     
     /*
@@ -389,6 +414,11 @@ var jsonTree = (function() {
             moreContentEl = el.querySelector('.jsontree_show-more');
     
             labelEl.addEventListener('click', function(e) {
+                if (e.altKey) {
+                    self.toggleMarked();
+                    return;
+                }
+
                 self.toggle(e.ctrlKey || e.metaKey);
             }, false);
             
@@ -498,7 +528,14 @@ var jsonTree = (function() {
                     }
                 });
             }
-        }
+        },
+
+        /**
+         * Mark or unmark node
+         */
+         toggleMarked : function() {
+            this.el.classList.toggle('jsontree_node_marked');    
+         }
     };
     
     

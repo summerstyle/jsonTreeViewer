@@ -17,6 +17,7 @@ Online: http://summerstyle.github.io/jsonTreeViewer
 1. Load json: click on "load" button and load a json-string to opened form
 2. Expand/collapse single nodes by click on properties names (recursively - by `SHIFT` + click)
 3. Expand/collapse all tree nodes by click on "expand all" and "collapse all" buttons
+4. Mark/unmark node labels by click on label with pressed `ALT` key
 
 
 ### jsonTree library (JSON pretty-printer)

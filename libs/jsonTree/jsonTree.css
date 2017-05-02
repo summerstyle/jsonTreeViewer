@@ -39,6 +39,12 @@
     vertical-align: top;
     color: #000;
     position: relative;
+    padding: 1px;
+    border-radius: 4px;
+    cursor: default;
+}
+.jsontree_node_marked > .jsontree_label-wrapper > .jsontree_label {
+    background: #fff2aa;
 }
 
 /* Styles for values */
