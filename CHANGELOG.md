@@ -1,3 +1,11 @@
+### 0.5.0
+* Show loading json form after loading page
+* Add marking/unmarking for node labels by click with pressed ALT key
+* Change modifier key for recursive expanding (CTRL, META instead SHIFT)
+* Add beautiful PT Mono monospace font from google.fonts
+* Add sorting for object keys
+* Refactor names of CSS-classes
+
 ### 0.4.0
 * Add filter function for expanding selected child nodes of root element
 * Disable expanding for empty nodes
@@ -19,4 +27,3 @@
 
 ### 0.1.0
 * Create base of jsonTreeViewer
-

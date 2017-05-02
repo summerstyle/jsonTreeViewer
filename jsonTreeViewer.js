@@ -60,7 +60,8 @@ var jsonTreeViewer = (function() {
         content_el : document.getElementById('help'),
         overlay : true
     });
-    
+
+    load_json_form.show();
     
     return {
         parse : function(json_str) {
