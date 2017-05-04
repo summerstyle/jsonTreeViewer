@@ -27,6 +27,11 @@ var jsonTreeViewer = (function() {
         'collapse_button' : function() {
             tree.collapse();
         },
+        'source_button': function() {
+            source_json_window.print(
+                tree.toSourceJSON('isPrettyPrinted')
+            );
+        },
         'help_button' : function() {
             help.show();
         } 
@@ -59,6 +64,20 @@ var jsonTreeViewer = (function() {
     var help = new App.Window({
         content_el : document.getElementById('help'),
         overlay : true
+    });
+
+    /* Block for source JSON */
+    var source_json_window = new App.Window({
+        content_el : utils.dom.id('source_json'),
+        overlay : true,
+        js_module : function(self) {
+            return {
+                print: function(str) {
+                    self.content_el.innerHTML = str;
+                    self.show();
+                }
+            };
+        }
     });
 
     load_json_form.show();

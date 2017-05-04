@@ -604,6 +604,8 @@ var jsonTree = (function() {
         
         this.rootNode = null;
         
+        this.sourceJSONObj = jsonObj;
+
         this.loadData(jsonObj);
         this.appendTo(domEl);
     }
@@ -621,6 +623,8 @@ var jsonTree = (function() {
                 alert('The root should be an object or an array');
                 return;
             }
+
+            this.sourceJSONObj = jsonObj;
             
             this.rootNode = new Node(null, jsonObj, 'last');
             this.wrapper.innerHTML = '';
@@ -639,7 +643,7 @@ var jsonTree = (function() {
         /**
          * Expands all tree nodes (objects or arrays) recursively
          *
-         * @param {Function} filterFunc - returns true if this node should be expanded
+         * @param {Function} filterFunc - 'true' if this node should be expanded
          */
         expand : function(filterFunc) {
             if (this.rootNode.isComplex) {
@@ -662,6 +666,25 @@ var jsonTree = (function() {
             if (typeof this.rootNode.collapse === 'function') {
                 this.rootNode.collapse('recursive');
             }
+        },
+        /**
+         * Returns the source json-string (pretty-printed)
+         * 
+         * @param {boolean} isPrettyPrinted - 'true' for pretty-printed string
+         * @returns {string} - for exemple, '{"a":2,"b":3}'
+         */
+        toSourceJSON : function(isPrettyPrinted) {
+            if (!isPrettyPrinted) {
+                return JSON.stringify(this.sourceJSONObj);
+            }
+
+            var DELIMETER = "[%^$#$%^%]",
+                jsonStr = JSON.stringify(this.sourceJSONObj, null, DELIMETER);
+
+            jsonStr = jsonStr.split("\n").join("<br />");
+            jsonStr = jsonStr.split(DELIMETER).join("&nbsp;&nbsp;&nbsp;&nbsp;");
+
+            return jsonStr;
         }
     };
 
