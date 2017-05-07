@@ -79,17 +79,15 @@
 /* Styles for active elements */
 .jsontree_expand-button {
     position: absolute;
-    top: 5px;
+    top: 3px;
     left: -15px;
     display: block;
-    width: 9px;
-    height: 9px;
-    background: #777;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gUBFAsKjLIEkwAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAQElEQVQI14WPyw0AMAhCrenOMAJb24OHNvb3ThiFYIsIkrYhyQDECQC+3pYAtzu9OFJImrscSKb4Z3rtvdAe/w3I7C/CeujfAgAAAABJRU5ErkJggg==);
+    width: 11px;
+    height: 11px;
+    background-image: url('icons.svg');
 }
 .jsontree_node_expanded > .jsontree_label-wrapper > .jsontree_label > .jsontree_expand-button {
-    background: #FFF;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gUBFAwe2SlGKQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAARUlEQVQI132PwQ3AMAwCjdWd8QhMbfrIo1Ga5D4IYYEM21UVPyQFSe8gmfOt7dlmnHmGLJOSvmyY7s7MfSeA496S4fLfC/74Ll1MLvV+AAAAAElFTkSuQmCC);
+    background-position: 0 -11px;
 }
 .jsontree_show-more {
     cursor: pointer;
