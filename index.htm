@@ -34,19 +34,25 @@
         </h1>
         <nav id="nav" class="clearfix">
             <ul class="menu menu_level1">
-                <li data-action="load_button" class="menu__item">
+                <li data-action="load" class="menu__item">
                     <span class="menu__item-name">load</span>
                 </li>
-                <li data-action="expand_button" class="menu__item">
+                <li data-action="expand" class="menu__item">
                     <span class="menu__item-name">expand all</span>
                 </li>
-                <li data-action="collapse_button" class="menu__item">
+                <li data-action="collapse" class="menu__item">
                     <span class="menu__item-name">collapse all</span>
                 </li>
-                <li data-action="source_button" class="menu__item">
+                <li data-action="find_and_mark" class="menu__item">
+                    <span class="menu__item-name">find and mark</span>
+                </li>
+                <li data-action="unmark_all" class="menu__item">
+                    <span class="menu__item-name">unmark all</span>
+                </li>
+                <li data-action="source" class="menu__item">
                     <span class="menu__item-name">show source</span>
                 </li>
-                <li data-action="help_button" class="menu__item">
+                <li data-action="help" class="menu__item">
                     <span class="menu__item-name">?</span>
                 </li>
             </ul>
@@ -108,6 +114,73 @@
             </p>
         </section>
         <button id="load_code_button">Load</button>
+    </form>
+
+    <!-- Find nodes form -->
+    <form id="find_nodes_form" class="form" data-header="Find nodes">
+        <section>
+            <p>
+                <label>
+                    <input type="radio" 
+                        name="nodes_search_type" 
+                        value="label" 
+                        id="nodes_search_by_label"
+                        checked="checked" />
+                    By label name:
+                </label>
+            </p>
+            <input type="text" id="search_by_label_name" />
+        </section>
+        <section>
+            <p>
+                <label>
+                    <input type="radio" 
+                        name="nodes_search_type"
+                        id="nodes_search_by_type" 
+                        value="type" />
+                    By value type:
+                </label>
+            </p>
+            <ul class="checkboxes">
+                <li>
+                    <label>
+                        <input type="checkbox" name="nodes_type" value="string" />
+                        string
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="nodes_type" value="number" />
+                        number
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="nodes_type" value="boolean" />
+                        boolean
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="nodes_type" value="null" />
+                        null
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="nodes_type" value="object" />
+                        object
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="nodes_type" value="array" />
+                        array
+                    </label>
+                </li>
+            </ul>
+        </section>
+        <button id="find_button">Find and mark</button>
     </form>
 
     <!-- For source JSON -->

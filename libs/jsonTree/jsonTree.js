@@ -122,6 +122,17 @@ var jsonTree = (function() {
                 default:
                     return false;
             }
+        },
+
+        /**
+         * Extends some object
+         */
+        extend : function(targetObj, sourceObj) {
+            for (var prop in sourceObj) {
+                if (sourceObj.hasOwnProperty(prop)) {
+                    targetObj[prop] = sourceObj[prop];
+                }
+            }
         }
     };
     
@@ -170,12 +181,12 @@ var jsonTree = (function() {
     }
     
     Node.CONSTRUCTORS = {
-        'boolean': NodeBoolean,
-        'number' : NodeNumber,
-        'string' : NodeString,
-        'null'   : NodeNull,
-        'object' : NodeObject,
-        'array'  : NodeArray  
+        'boolean' : NodeBoolean,
+        'number'  : NodeNumber,
+        'string'  : NodeString,
+        'null'    : NodeNull,
+        'object'  : NodeObject,
+        'array'   : NodeArray  
     };
     
     
@@ -246,6 +257,20 @@ var jsonTree = (function() {
 
     _NodeSimple.prototype = {
         constructor : _NodeSimple,
+
+        /**
+         * Mark node
+         */
+         mark : function() {
+            this.el.classList.add('jsontree_node_marked');    
+         },
+
+         /**
+         * Unmark node
+         */
+         unmark : function() {
+            this.el.classList.remove('jsontree_node_marked');    
+         },
 
         /**
          * Mark or unmark node
@@ -446,8 +471,10 @@ var jsonTree = (function() {
             el.classList.add('jsontree_node_empty');
         }
     }
+
+    utils.inherits(_NodeComplex, _NodeSimple);
     
-    _NodeComplex.prototype = {
+    utils.extend(_NodeComplex.prototype, {
         constructor : _NodeComplex,
         
         /*
@@ -531,12 +558,28 @@ var jsonTree = (function() {
         },
 
         /**
-         * Mark or unmark node
+         * Find child nodes that match some conditions and handle it
+         * 
+         * @param {Function} matcher
+         * @param {Function} handler
+         * @param {boolean} isRecursive
          */
-         toggleMarked : function() {
-            this.el.classList.toggle('jsontree_node_marked');    
-         }
-    };
+        findChildren : function(matcher, handler, isRecursive) {
+            if (this.isEmpty) {
+                return;
+            }
+            
+            this.childNodes.forEach(function(item, i) {
+                if (matcher(item)) {
+                    handler(item);
+                }
+
+                if (item.isComplex && isRecursive) {
+                    item.findChildren(matcher, handler, isRecursive);
+                }
+            });
+        }
+    });
     
     
     /*
@@ -667,6 +710,7 @@ var jsonTree = (function() {
                 this.rootNode.collapse('recursive');
             }
         },
+
         /**
          * Returns the source json-string (pretty-printed)
          * 
@@ -685,6 +729,24 @@ var jsonTree = (function() {
             jsonStr = jsonStr.split(DELIMETER).join("&nbsp;&nbsp;&nbsp;&nbsp;");
 
             return jsonStr;
+        },
+
+        /**
+         * Find all nodes that match some conditions and handle it
+         */
+        findAndHandle : function(matcher, handler) {
+            this.rootNode.findChildren(matcher, handler, 'isRecursive');
+        },
+
+        /**
+         * Unmark all nodes
+         */
+        unmarkAll : function() {
+            this.rootNode.findChildren(function(node) {
+                return true;
+            }, function(node) {
+                node.unmark();
+            }, 'isRecursive');
         }
     };
 
