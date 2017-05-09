@@ -261,23 +261,38 @@ var jsonTree = (function() {
         /**
          * Mark node
          */
-         mark : function() {
+        mark : function() {
             this.el.classList.add('jsontree_node_marked');    
-         },
+        },
 
-         /**
+        /**
          * Unmark node
          */
-         unmark : function() {
+        unmark : function() {
             this.el.classList.remove('jsontree_node_marked');    
-         },
+        },
 
         /**
          * Mark or unmark node
          */
-         toggleMarked : function() {
+        toggleMarked : function() {
             this.el.classList.toggle('jsontree_node_marked');    
-         }
+        },
+
+        /**
+         * Expands parent node of this node
+         *
+         * @param isRecursive {boolean} - if true, expands all parent nodes
+         *                                (from node to root)
+         */
+        expandParent : function(isRecursive) {
+            if (!this.parent) {
+                return;
+            }
+               
+            this.parent.expand(); 
+            this.parent.expandParent(isRecursive);
+        }
     };
     
     
@@ -454,6 +469,7 @@ var jsonTree = (function() {
             self.isRoot = false;
         } else {
             self.isRoot = true;
+            self.parent = null;
     
             el.classList.add('jsontree_node_expanded');
         }
@@ -485,6 +501,7 @@ var jsonTree = (function() {
         addChild : function(child) {
             this.childNodes.push(child);
             this.childNodesUl.appendChild(child.el);
+            child.parent = this;
         },
     
         /*

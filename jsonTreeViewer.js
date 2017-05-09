@@ -142,6 +142,7 @@ var jsonTreeViewer = (function() {
 
                 tree.findAndHandle(matcher, function(node) {
                     node.mark();
+                    node.expandParent('isRecursive');
                 });
 
                 self.hide();
