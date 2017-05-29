@@ -1,3 +1,10 @@
+### 0.6.0
+* Add displaying for JSONPath of each node
+* Add parent nodes expanding for finded and marked node
+* Add nodes search by some conditions
+* Replace images for expand/collapse buttons with new svg icons
+* Add toSourceJSON method for trees and source block for viewer
+
 ### 0.5.0
 * Show loading json form after loading page
 * Add marking/unmarking for node labels by click with pressed ALT key

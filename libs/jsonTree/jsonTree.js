@@ -252,6 +252,12 @@ var jsonTree = (function() {
                 self.toggleMarked();
                 return;
             }
+
+            if (e.shiftKey) {
+                document.getSelection().removeAllRanges();
+                alert(self.getJSONPath());
+                return;
+            }
         }, false);
     }
 
@@ -292,6 +298,29 @@ var jsonTree = (function() {
                
             this.parent.expand(); 
             this.parent.expandParent(isRecursive);
+        },
+
+        /**
+         * Returns JSON-path of this 
+         * 
+         * @param isInDotNotation {boolean} - kind of notation for returned json-path
+         *                                    (by default, in bracket notation)
+         * @returns {string}
+         */
+        getJSONPath : function(isInDotNotation) {
+            if (this.isRoot) {
+                return "$";
+            }
+
+            var currentPath;
+
+            if (this.parent.type === 'array') {
+                currentPath = "[" + this.label + "]";
+            } else {
+                currentPath = isInDotNotation ? "." + this.label : "['" + this.label + "']";
+            }
+
+            return this.parent.getJSONPath(isInDotNotation) + currentPath; 
         }
     };
     
@@ -456,6 +485,12 @@ var jsonTree = (function() {
             labelEl.addEventListener('click', function(e) {
                 if (e.altKey) {
                     self.toggleMarked();
+                    return;
+                }
+
+                if (e.shiftKey) {
+                    document.getSelection().removeAllRanges();
+                    alert(self.getJSONPath());
                     return;
                 }
 
