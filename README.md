@@ -65,11 +65,11 @@ var tree = jsonTree.create(data, wrapper);
 // Expand all (or selected) child nodes of root (optional)
 tree.expand(function(node) {
    return node.childNodes.length < 2 || node.label === 'phoneNumbers';
-}
+});
 ```
 You can create many trees on one html-page.
 
-##### The aviable methods of each json tree:
+##### The available methods of each json tree:
 
 * `loadData(jsonObj)` - Fill new data to current json tree
 * `appendTo(domEl)` - Appends tree to DOM-element (or move it to new place)
